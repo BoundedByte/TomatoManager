@@ -1,0 +1,89 @@
+File formats to consider supporting:
+    JPEG2000 / JXL (Need example to test on)
+    PPM (Need example to test on)
+    PSD (Need example to test on)
+    TIFF (Need example to test on)
+TESTED via Tests/battery.sh based on common XMP metadata fields below:
+    OK:
+        GIF (29/29)
+        JPEG / JPG (29/29)
+        PNG (29/29)
+        M4A (29/29)
+        MP4 (29/29)
+        PDF (28/29, drops support for Comment)
+        WEBP (28/29, drops support for Comment)
+    MORE TESTING NEEDED:
+        AVIF (Reads as JPEG or GIF and refuses to treat them otherwise LOL)
+    KNOWN NOT SUPPORTED:
+        AIFF (ExifTool does not support writing yet)
+        MP3 (ExifTool does not support writing yet)
+        OGG (ExifTool does not support writing yet)
+        WAV (ExifTool does not support writing yet)
+        WEBM (ExifTool does not support writing yet)
+
+Metadata Field Formats:
+    date: YYYY:mm:dd HH:MM:SS[.ss][+/-HH:MM]
+    lang-alt: Tag supports alternate langauges ({tag}-fr, {tag}-en_US, for example)
+    boolean: [{Yes}{No}]
+Structs have to be specified by flattened components (or fully qualified).
+You may need to pass `-struct` to ExifTool in order to read the tag back.
+
++ indicates a List tag that can be appended to
+/ indicates a tag ExifTool will edit, but preferably avoid creating if another same-name tag can be created instead
+! indicates a tag that is generally unsafe to write to under normal circumstances as they can affect data processing / rendering
+* indicates protected tag which is handled automatically by ExifTool
+: indicates a mandatory tag which may be added automatically when writing
+
+28 common writable tags:
+  About                        (XMP rdf string!)
+  AttributionURL               (XMP cc string)
+  Author                       (XMP pdf string)
+  BaseURL                      (XMP xmp string)
+  Caption                      (XMP acdsee string/)
+  Description                  (XMP crd/dc/xmp lang-alt)
+  DOI                          (XMP prism string/)
+  Label                        (XMP xmp string)
+  LabelName1                   (XMP ics string_+)
+  LabelName2                   (XMP ics string_+)
+  LabelName3                   (XMP ics string_+)
+  LabelName4                   (XMP ics string_+)
+  LabelName5                   (XMP ics string_+)
+  LabelName6                   (XMP ics string_+)
+  Lyrics                       (XMP xmpDM string)
+  MetadataAuthorityIdentifier  (XMP iptcExt string_+)
+  MetadataAuthorityName        (XMP iptcExt lang-alt_)
+  MetadataDate                 (XMP xmp date)
+  MetadataLastEdited           (XMP iptcExt date)
+  MetadataLastEditorIdentifier (XMP iptcExt string_+)
+  MetadataLastEditorName       (XMP iptcExt lang-alt_)
+  MetadataModDate              (XMP xmpDM date)
+  Notes                        (XMP acdsee string/)
+  Tagged                       (XMP acdsee boolean/)
+  TagsList                     (XMP digiKam string+)
+  Transcript                   (XMP iptcExt lang-alt)
+  TranscriptLink               (XMP iptcExt QualifiedLink struct)
+  URLUrl                       (XMP prism string/_+)
+
+Common tags but won't be read without -struct:
+  ArtworkSource
+  ArtworkSourceInvURL
+  MetadataAuthority  (XMP iptcExt XMP Entity Struct {Identifier: string+, Name: lang-alt})
+  MetadataLastEditor (XMP iptcExt XMP Entity Struct {Identifier: string+, Name: lang-alt})
+  TagStructure (XMP ics XMP TagStructure Struct {LabelName: string, ParentReference: String, Reference: String, SubLabels: TagStructure+})
+
+Exiftool reports as common, but not actually common:
+  Killed by lack of support from JPGs (and possibly others)
+    Address
+    LongDescription
+    SourceCredits
+    MetaVersion # MAY BE COMPLIANT, BUT UNKNOWN AND STRICTLY LIMITED LENGTH
+  Killed by lack of support from WEBP (and possibly others)
+    Comment
+    Source
+    URL
+
+Sanitized by Discord and likely other apps:
+  Artist
+  MetadataEditingSoftware
+  UserComment
+
