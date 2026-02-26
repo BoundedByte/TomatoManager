@@ -1,11 +1,14 @@
 # TomatoManager: Community-Sharable Metadata Read/Write for Attribution
 
-TL;DR: TomatoManager assists in maintaining metadata information to help you search, organize, and attribute files. By editing the actual file metadata, this information can be transparently shared and pooled by a community effort rather than relying upon your individual capabilities.
+TL;DR: TomatoManager assists in maintaining metadata information to help you search, organize, and attribute files.
+By editing the actual file metadata, this information can be transparently shared and pooled by a community effort rather than relying upon your individual capabilities.
 
 ## Installation
 
 Requires Python>=3.14, python3-pandas, and [exiftool](https://exiftool.org).
+
 No compilation required, no makefiles.
+
 Optionally, you can also include [TagStudio](github.com/TagStudioDev/TagStudio/releases) for a GUI to create and manage tags and metadata -- TagStudio does not have a TomatoManager plugin, so you'll need to synchronize metadata to files via TomatoManager.
 
 ## Interfaces
@@ -19,6 +22,7 @@ For up-to-date options and usage, try: `python3 TomatoManager.py --help`
 ## Development Roadmap
 
 v1.0: CLI fully functions with{out} TagStudio
+
     - Metadata read from files
     - Metadata read from TagStudio
     - Metadata-based search
@@ -26,19 +30,24 @@ v1.0: CLI fully functions with{out} TagStudio
     - Metadata write to TagStudio
     - Metadata synchronization files\<--\>TagStudio
 v2.0: Cross-platform GUI as simplified TagStudio replacement
+
     - File browsing
     - Fully featured metadata management and searching
     - MAYBE: Quick Preview for files
 v3.0: Internet connectivity
+
     - SauceNao lookups
     - Transcript site lookups
 v4.0: Database
+
     - Automatically match files based on content (reverse image search or hashing-based)
     - Web API
 v5.0: App integrations
+
     - Discord bot
 
 ### Future releases intend to include:
+
 * Per major OS distributable GUIs
 * Website implementation
 * Discord bot
