@@ -33,7 +33,7 @@ If the current working directory has a ".TagStudio" folder, the script will plac
 ## Importing Another Library (Merge)
 
 TomatoManager can merge data from another library with your metadata.
-In the current version, merges are authoritative, meaning _all_ foreign data will overwrite your data!
+In the current version, merges are authoritative, meaning _all_ foreign data will overwrite your previously saved data!
 
 A future release will allow you to navigate merges with more nuance, but you can limit the scope by specifying specific files you want merged from the foreign data:
 

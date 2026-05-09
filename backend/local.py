@@ -1,7 +1,7 @@
 """
     (C) BoundedByte 2026
 
-    exiftool.py: Interactions with ExifTool (non-Python dependency)
+    local.py: Interactions with ExifTool (non-Python dependency) to support reading data in files
         - Read metadata from file
         - Write metadata to file
 """
@@ -12,6 +12,7 @@ import pandas as pd # CSV read, DataFrame type
 # Local modules
 from .metadata import TomatoManagerTags, TagSpacing
 from .manager import Manager
+from .pdutil import pandas_append_series_to_end_of_frame
 
 # Python3 builtin modules -- no extra install required
 import argparse
@@ -20,45 +21,56 @@ import pathlib
 import subprocess
 from typing import List, Generator, Optional, Union
 
-class ExifToolManager(Manager):
+class LocalManager(Manager):
     """
-        Manager for CSV data in ExifTool format ('SourceFile' column + TomatoManagerTags)
+        Manager for metadata resident in files via ExifTool
     """
     def __init__(self,
-                 csv_target: pathlib.Path = pathlib.Path('exiftool.csv'),
+                 targets: Optional[List[pathlib.Path]] = None,
                  exiftool_path: pathlib.Path = pathlib.Path('exiftool'),
                  ) -> None:
         """
-            Enforce CSV path expectation and store exiftool path for use when calling out to exiftool dependency
+            Store exiftool path for use when calling out to exiftool dependency
+            Load any local files indicated at initialization time
         """
-        if csv_target.suffix.lower() != ".csv":
-            raise ValueError(f"CSV target must be CSV type, got '{csv_target.suffix}'")
-        super().__init__(csv_target)
+        accepted_targets = list()
+        if targets is not None:
+            while len(targets) > 0:
+                t = targets.pop()
+                if not t.is_dir():
+                    accepted_targets.append(t)
+                else:
+                    targets.extend(t.iterdir())
+        if len(accepted_targets) == 0:
+            raise ValueError("No files to index")
+        self.targets = accepted_targets
         self.exiftool_path = exiftool_path
+        super().__init__("<LOCAL TO FILES>")
 
     def bind_from_disk(self,
                        bind: bool = True,
                        ) -> Optional[pd.DataFrame]:
         """
-            Use pandas to read CSV for simple DataFrame
+            Use ExifTool to read from disk
         """
-        if not self.file_target.exists():
-            self.mappings = None
-            self.cache = None
-            return
-        mappings = pd.read_csv(self.file_target)
-        if bind:
-            self.mappings = mappings
-            self.cache = None
-        else:
-            return mappings
+        return self.read_mappings_from_files(self.targets, bind=bind)
 
     def bind_to_disk(self,
                      ) -> None:
         """
-            Pandas DataFrame provides CSV writing capabilities
+           Use ExifTool to write back to files
         """
-        self.mappings.to_csv(self.file_target, index=False)
+        temporary_csv = pathlib.Path('tmp.csv')
+        suffix = 0
+        while temporary_csv.exists():
+            temporary_csv = temporary_csv.with_stem(f'tmp_{suffix}')
+            suffix += 1
+        self.mappings.to_csv(temporary_csv, index=False)
+        old_file_target = self.file_target
+        self.file_target = temporary_csv
+        self.apply_mappings_to_files(self.targets, allow_overwrite=True)
+        temporary_csv.unlink()
+        self.file_target = old_file_target
 
     def read_mappings_from_files(self,
                                  disk_paths: Optional[Union[pathlib.Path,
@@ -83,7 +95,7 @@ class ExifToolManager(Manager):
                 disk_paths = [disk_paths]
 
             # Batch-call ExifTool on all paths
-            cmd = [self.exiftool_path, '-csv', '-r']
+            cmd = [self.exiftool_path, '-r']
             cmd += [f'-{tag}' for tag in TomatoManagerTags]
             cmd += disk_paths
 
@@ -92,7 +104,29 @@ class ExifToolManager(Manager):
             if proc.returncode != 0:
                 raise ValueError(f"ExifTool return code: {proc.returncode}")
             output = proc.stdout.decode('utf-8')
-            mappings = pd.read_csv(StringIO(output))
+            # Parse EXIFTOOL output
+            current_media = None
+            row = pd.Series(index=['SourceFile']+TomatoManagerTags, dtype=object)
+            for line in output.split('\n'):
+                if len(line) == 0 or line.endswith('files read'):
+                    continue
+                if line.startswith('========'):
+                    if current_media is not None:
+                        mappings = pandas_append_series_to_end_of_frame(mappings, row)
+                        row = pd.Series(index=['SourceFile']+TomatoManagerTags, dtype=object)
+                    current_media = line.split(' ',1)[1]
+                    row['SourceFile'] = current_media
+                else:
+                    field, value = line.split(':',1)
+                    # ExifTool pretty-prints the field names, strip out spaces etc
+                    field = field.rstrip().replace(' ','')
+                    value = value.lstrip()
+                    row[field] = value
+            # Single-file reads imply name at the end
+            if current_media is None:
+                row['SourceFile'] = str(disk_paths[0])
+            if sum(row.isna()) < len(row):
+                mappings = pandas_append_series_to_end_of_frame(mappings, row)
         if bind:
             self.mappings = mappings
             self.cache = None
@@ -160,7 +194,7 @@ class ExifToolManager(Manager):
             if pd.isna(value):
                 continue
             entry_made = True
-            report_field = f"EXIFTOOL {tag+':':<{TagSpacing}}{value}"
+            report_field = f"LOCAL {tag+':':<{TagSpacing}}{value}"
             yield self.string_options(report_field, options)
         if not entry_made:
             report_field = f"No relevant EXIFTOOL metadata for '{path}'"

@@ -31,7 +31,7 @@ To establish your own libraries or refer to interoperability between various sof
 
 ## Usage and Interfaces
 
-The current version only supports a CLI, so you'll need to use either Microsoft PowerShell or a UNIX terminal.
+The current version only supports a CLI, so you'll need to use either a UNIX terminal or functional equivalent (ie: Python IDLE, Microsoft PowerShell -- not tested).
 
 * CLI: For up-to-date options and usage, try: `python3 cli.py --help`.
 

@@ -7,6 +7,7 @@
 # Python3 builtin modules -- no extra installation required
 import datetime
 
+# Tags in the XMP namespace used across all media
 TomatoManagerTags = [
     'AttributionURL',
     'Author',
@@ -30,6 +31,7 @@ TomatoManagerTags = [
     'TranscriptLink',
     'URLUrl',
 ]
+TagSpacing = max(map(len,TomatoManagerTags))+1
 
 type_and_modifier_help = """\
 Types:

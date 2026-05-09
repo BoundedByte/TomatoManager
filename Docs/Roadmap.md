@@ -1,48 +1,47 @@
-# Future releases intend to include:
-
-* Self-hostable GUI -and/or- browser GUI (no network connection)
-* Centralized website with community database
-* Discord bot
-
 # Development Roadmap
 
 ## To-Be-Developed
 
-### v1.0: CLI fully functions with{out} TagStudio
+### As soon as available and trustworthy:
 
-    - ✅ Metadata read from files
-    - ✅ Metadata read from TagStudio
-    - ✅ Metadata-based search
-    - ✅ Metadata write to files
-    - ✅ Metadata write to TagStudio
-    - ✅ Metadata synchronization files\<--\>TagStudio
+    - Manager registration for filetypes in case of subclassing/extensions
+    - Manager search via date
+    - Replicate TagStudio folder consolidation based on real path to reduce folder count in the database
+    - TagStudio full compatibility on NOTES type
+    - Support multiple URLs for a media within ExifTool
+    - Reject ill-formatted dbs from ExifTool and TagStudio upon load
 
-### v2.0: Cross-platform browser/GUI as simplified TagStudio replacement
+### v2.x: Cross-platform browser/GUI as simplified TagStudio replacement
 
     - File browsing with previews
-    - Fully featured metadata management and searching
-    - Support for extra metadata attributes in TagStudio via Notes
+    - Fully featured GUI-based metadata management and searching
+    - More nuanced metadata merges
+        + Blank slate to accumulate an authoritative merge (with user input to pick which version)
+        + Constrain merges to particular fields
     - Improved search capabilities:
         + Date-fields
         + Tagged boolean status
 
-### v3.0: Centralized website with community databases
+### v3.x: Centralized website with community databases
 
     - Centralized website
-    - Per-community databases
+        + Subscribable endpoint for metadata updates with per-community databases (or alternative IP if self-hosting)
+        + Allows pseudonoymous affiliation for submitted attributions so others can thank you for it
 
+### v4.x: External tool support
 
-### v4.0: External tool support
-
-    - SauceNao lookups
-    - Transcript site lookups
+    - Transcript, SauceNao and/or other external resource/aggregator lookups
     - Automatically match files based on content (reverse image search or hashing-based)
 
-### v5.0: App integrations
+### v5.x: App integrations
 
-    - Discord bot
+    - Discord bot to fetch attributions when known
+        + Crawler for known/consenting persons and sites to automatically match new works ASAP
 
 ## Released
 
-\* Crickets \*
+### v1.x: CLI fully functions with{out} TagStudio
+
+    - ✅ Metadata write/read to/from files, TagStudio, ExifTool databases
+    - ✅ Metadata-based search
 

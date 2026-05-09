@@ -20,14 +20,15 @@ Nor is it any good to try and search for files based on some name-based sorting 
 
 # Specifics of TomatoManager's Metadata Management Strategy:
 
-We use XMP metadata tags to track key information in file headers:
+TomatoManager uses XMP metadata tags to track key information in file headers:
 
 * Who created the media (publicly known names only, such as a social media handle)?
 * Where was the media originally posted (DOI or URL)?
 * How is the media tagged (characters, styles, expressions, themes, anything you want)?
 * Who helped with the metadata management (opt-in, give credit to those who give credit)?
 
-You can also provide captions, descriptions, lyrics, and transcripts in your metadata. Awfully convenient, isn't it?
+You can also provide captions, descriptions, lyrics, and transcripts in your metadata.
+Awfully convenient, isn't it?
 
 ## What file formats are supported?
 
@@ -44,11 +45,13 @@ With exiftool Version 13.50, TomatoManager can fully support:
 * M4A
 * PDF
 
-TomatoManager cannot currently support the following due to missing metadata-write capabilities from ExifTool. If you can help upstream those contributions, consider helping the cause there.
+TomatoManager cannot currently support the following common media formats due to missing metadata-write capabilities from ExifTool.
 
 * AIFF
 * MP3
 * OGG
 * WAV
 * WEBM
+
+If you can help contribute metadata-write capabilities to ExifTool, consider doing so but ensure you conform to their contribution expectations!
 
