@@ -9,11 +9,11 @@ Requires Python>=3.14, python3-pandas, and [exiftool](https://exiftool.org).
 
 TomatoManager itself just runs as a script -- no additional compilation or installation required.
 
-Optionally, you can also include [TagStudio](github.com/TagStudioDev/TagStudio/releases) for a GUI to create and manage tags and metadata -- TagStudio does NOT have a TomatoManager plugin, so you'll need to synchronize metadata to files via TomatoManager.
+Optionally, you can also include [TagStudio](https://github.com/TagStudioDev/TagStudio/releases) for a GUI to create and manage tags and metadata -- TagStudio does NOT have a TomatoManager plugin, so you'll need to synchronize metadata to files via TomatoManager.
 
 ## Setup
 
-The [License](.LICENSE) leaves you in charge of your usage of the program, but it is always recommended to create and maintain a backup of all files **PRIOR** to using TomatoManager!
+The [License](LICENSE) leaves you in charge of your usage of the program, but it is always recommended to create and maintain a backup of all files **PRIOR** to using TomatoManager!
 
 No current issues are known and the tool tries to be reasonably safe unless you manually request overrides, but a backup guarantees the capability to restore your data!
 
@@ -37,7 +37,7 @@ The current version only supports a CLI, so you'll need to use either a UNIX ter
 
 ### Future Interfaces
 
-Planned interfaces that don't exist yet. See the [Roadmap](.Docs/Roadmap.md) for additional details.
+Planned interfaces that don't exist yet. See the [Roadmap](Docs/Roadmap.md) for additional details.
 
     - Self-hostable / browser GUI
     - Centralized website with community database
