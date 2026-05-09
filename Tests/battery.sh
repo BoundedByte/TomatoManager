@@ -120,3 +120,4 @@ if [[ ${validated_count} -eq ${expect_valid_count} ]]; then
 else
     echo "${validated_count} / ${expect_valid_count} tag tests passed";
 fi;
+
